@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0b0f">
+  <title>Focus Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="16" cy="16" r="5" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Focus</span>
+      <span class="brand-tag">Disciplina • Foco • Execução • Progresso</span>
+    </div>
+    <nav class="nav">
+      <a href="#tarefas" class="nav-link">O meu dia</a>
+      <button type="button" class="nav-link" id="btnHistory">Histórico</button>
+      <button type="button" class="btn btn-ghost" id="btnSettings">Definições</button>
+      <span class="avatar" id="avatar" aria-hidden="true">F</span>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <div>
+        <p class="greeting" id="greeting">Bom dia.</p>
+        <h1>Dá espaço ao que importa.</h1>
+      </div>
+      <div class="hero-right">
+        <span class="date" id="today"></span>
+        <span class="chip" id="statusChip"><i class="dot"></i><span id="statusText">Pronto</span></span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Resumo do dia">
+      <article class="card stat">
+        <div>
+          <p class="stat-label">Tarefas planeadas</p>
+          <p class="stat-value"><span id="statTotal">0</span><small id="statPlanned">0 min previstos</small></p>
+        </div>
+      </article>
+      <article class="card stat">
+        <div>
+          <p class="stat-label">Tarefas concluídas</p>
+          <p class="stat-value"><span id="statDone">0</span><small id="statLeft">0 por concluir</small></p>
+        </div>
+      </article>
+      <article class="card stat">
+        <div>
+          <p class="stat-label">Tempo investido</p>
+          <p class="stat-value"><span id="statTime">0 min</span><small>em foco hoje</small></p>
+        </div>
+      </article>
+      <article class="card stat">
+        <div>
+          <p class="stat-label">Conclusão do dia</p>
+          <p class="stat-value"><span id="statPercent">0%</span><small id="statOf">0 de 0 tarefas</small></p>
+        </div>
+        <svg class="mini-ring" viewBox="0 0 56 56" aria-hidden="true">
+          <circle cx="28" cy="28" r="22" class="ring-bg"/>
+          <circle cx="28" cy="28" r="22" class="ring-fg" id="miniRing"/>
+        </svg>
+      </article>
+    </section>
+
+    <section class="card milestones" aria-label="Milestones">
+      <div class="milestones-head">
+        <p class="stat-label">Progresso do dia</p>
+        <p class="muted" id="milestoneHint">Conclui a primeira tarefa para avançar.</p>
+      </div>
+      <div class="track">
+        <div class="track-fill" id="trackFill"></div>
+        <div class="mark" data-m="25"><i></i><span>25%</span></div>
+        <div class="mark" data-m="50"><i></i><span>50%</span></div>
+        <div class="mark" data-m="75"><i></i><span>75%</span></div>
+        <div class="mark" data-m="100"><i></i><span>100%</span></div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+
+      <article class="card tasks" id="tarefas">
+        <div class="card-head">
+          <h2>Tarefas do dia <span class="count" id="taskCount">0</span></h2>
+          <button type="button" class="btn btn-primary" id="btnNew">+ Nova tarefa</button>
+        </div>
+
+        <form class="quick-add" id="quickForm" autocomplete="off">
+          <input type="text" id="quickInput" maxlength="120" placeholder="Adicionar tarefa e carregar em Enter" aria-label="Nova tarefa">
+        </form>
+
+        <div class="tabs" role="tablist" id="filters">
+          <button type="button" class="tab active" data-filter="all" role="tab">Todas <span id="fAll">0</span></button>
+          <button type="button" class="tab" data-filter="open" role="tab">Por concluir <span id="fOpen">0</span></button>
+          <button type="button" class="tab" data-filter="done" role="tab">Concluídas <span id="fDone">0</span></button>
+        </div>
+
+        <ul class="task-list" id="taskList"></ul>
+
+        <div class="card-foot">
+          <span id="taskSummary">—</span>
+          <button type="button" class="link-btn" id="btnClearDone">Limpar concluídas</button>
+        </div>
+      </article>
+
+      <aside class="side">
+        <article class="card pomodoro">
+          <div class="card-head">
+            <h2>Pomodoro</h2>
+            <span class="chip small" id="pomoChip"><i class="dot"></i><span id="pomoChipText">Pronto</span></span>
+          </div>
+
+          <div class="segmented" id="modeTabs">
+            <button type="button" class="seg active" data-mode="focus">Foco</button>
+            <button type="button" class="seg" data-mode="rest">Descanso</button>
+          </div>
+
+          <div class="timer">
+            <svg viewBox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="100" class="ring-bg"/>
+              <circle cx="120" cy="120" r="100" class="ring-fg" id="timerRing"/>
+            </svg>
+            <div class="timer-center" role="timer" aria-live="off">
+              <span class="timer-label" id="timerLabel">TEMPO DE FOCO</span>
+              <span class="timer-time" id="timerTime">50:00</span>
+              <span class="timer-sub" id="timerSub">de 50:00 minutos</span>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button type="button" class="btn btn-icon" id="btnReset" title="Reiniciar" aria-label="Reiniciar">↺</button>
+            <button type="button" class="btn btn-primary btn-wide" id="btnToggle">Iniciar sessão</button>
+            <button type="button" class="btn btn-icon" id="btnSkip" title="Saltar para o próximo modo" aria-label="Saltar">⏭</button>
+          </div>
+
+          <div class="working">
+            <p class="working-label">A TRABALHAR EM</p>
+            <p class="working-title" id="workTitle">Sem tarefa em foco</p>
+            <p class="working-meta"><span id="workTag">Escolhe uma tarefa na lista</span><span id="workCount"></span></p>
+          </div>
+
+          <div class="dots-row">
+            <div class="dots" id="dots"></div>
+            <span class="muted small" id="nextUp">A seguir: pausa de 15 min</span>
+          </div>
+        </article>
+
+        <article class="card quiet">
+          <div>
+            <p class="quiet-title">Menos ruído. Mais foco.</p>
+            <p class="muted small">Sons e avisos silenciados durante a sessão.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="quietToggle" aria-label="Silenciar sons">
+            <span class="slider"></span>
+          </label>
+        </article>
+      </aside>
+    </section>
+
+    <section class="card bottom">
+      <div class="goal">
+        <div class="goal-head">
+          <p class="stat-label">Objetivo diário de foco</p>
+          <span class="accent" id="goalPct">0%</span>
+        </div>
+        <p class="goal-value"><b id="goalDone">0</b> <span>/ <span id="goalTotal">4</span> pomodoros concluídos</span></p>
+        <div class="bar"><div class="bar-fill" id="goalBar"></div></div>
+        <p class="muted small" id="goalMinutes">0 de 200 min</p>
+      </div>
+
+      <div class="week">
+        <div class="goal-head">
+          <p class="stat-label">A tua semana</p>
+          <span class="muted small">Pomodoros concluídos</span>
+        </div>
+        <div class="week-grid" id="weekGrid"></div>
+        <p class="muted small" id="weekSummary"></p>
+      </div>
+
+      <div class="tip">
+        <p class="accent small">↗ Uma tarefa. Toda a atenção.</p>
+        <p class="tip-text" id="tipText">Termina a sessão atual antes de passares à próxima tarefa.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>Um passo de cada vez. O progresso constrói-se todos os dias.</span>
+    <span id="savedAt">Alterações guardadas</span>
+  </footer>
+
+  <!-- Diálogo: tarefa -->
+  <dialog id="taskDialog">
+    <form method="dialog" id="taskForm" class="dialog-form">
+      <h3 id="taskDialogTitle">Nova tarefa</h3>
+      <label>Título
+        <input type="text" id="fTitle" maxlength="120" required placeholder="O que precisas de fazer?">
+      </label>
+      <div class="row">
+        <label>Projeto / etiqueta
+          <input type="text" id="fTag" maxlength="30" placeholder="Opcional">
+        </label>
+        <label>Pomodoros previstos
+          <input type="number" id="fEst" min="1" max="12" value="1">
+        </label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="taskCancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Diálogo: definições -->
+  <dialog id="settingsDialog">
+    <form method="dialog" id="settingsForm" class="dialog-form">
+      <h3>Definições</h3>
+      <label>O teu nome
+        <input type="text" id="sName" maxlength="30" placeholder="Como te devemos chamar?">
+      </label>
+      <div class="row">
+        <label>Foco (min)
+          <input type="number" id="sFocus" min="1" max="180" value="50">
+        </label>
+        <label>Descanso (min)
+          <input type="number" id="sRest" min="1" max="60" value="15">
+        </label>
+        <label>Meta diária (pomodoros)
+          <input type="number" id="sGoal" min="1" max="20" value="4">
+        </label>
+      </div>
+      <label class="check-row">
+        <input type="checkbox" id="sAuto"> Iniciar automaticamente o modo seguinte
+      </label>
+      <div class="dialog-actions between">
+        <button type="button" class="btn btn-danger" id="btnWipe">Apagar todos os dados</button>
+        <span>
+          <button type="button" class="btn btn-ghost" id="settingsCancel">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </span>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Diálogo: histórico -->
+  <dialog id="historyDialog">
+    <div class="dialog-form">
+      <h3>Histórico de foco</h3>
+      <ul class="history-list" id="historyList"></ul>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-primary" id="historyClose">Fechar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
